@@ -61,6 +61,8 @@ dependencies:
   internet_connection_checker: ^1.0.0+1
   flutter_launcher_icons: ^0.13.1
   curved_navigation_bar: ^1.0.6
+  flutter_native_splash: ^2.3.7
+  geocoding: ^3.0.0
 
 flutter_launcher_icons:
   #  image_path: "assets/images/ecommerce.png"

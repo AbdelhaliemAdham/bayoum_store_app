@@ -1,4 +1,5 @@
 import 'package:bayoum_store_app/helper/assets.dart';
+import 'package:bayoum_store_app/helper/location.dart';
 import 'package:bayoum_store_app/screens/auth/widgets/carouselslider.dart';
 import 'package:bayoum_store_app/screens/auth/widgets/category_title_widget.dart';
 import 'package:bayoum_store_app/screens/auth/widgets/men_products.dart';
@@ -6,6 +7,8 @@ import 'package:bayoum_store_app/screens/auth/widgets/search_bar.dart';
 import 'package:bayoum_store_app/screens/auth/widgets/shimmer_item.dart';
 import 'package:bayoum_store_app/screens/auth/widgets/women_product.dart';
 import 'package:flutter/material.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 
 import '../auth/widgets/categories_list_widget.dart';
 import '../auth/widgets/chip_widget.dart';
@@ -20,6 +23,36 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   bool isLoading = true;
+  String? _currentAddress;
+  Position? _currentPosition;
+  String? message;
+  List<Placemark> placemarks = [];
+
+  Future<void> _getCurrentPosition(BuildContext context) async {
+    final hasPermission = await GetLocation.handleLocationPermission();
+    if (!hasPermission) return;
+    await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
+        .then((Position position) {
+      setState(() => _currentPosition = position);
+      _getAddressFromLatLng(_currentPosition!);
+    }).catchError((e) {
+      debugPrint(e);
+    });
+  }
+
+  Future<void> _getAddressFromLatLng(Position position) async {
+    await placemarkFromCoordinates(
+            _currentPosition!.latitude, _currentPosition!.longitude)
+        .then((List<Placemark> placemarks) {
+      Placemark place = placemarks[0];
+      setState(() {
+        _currentAddress =
+            '${place.street}, ${place.subLocality}, ${place.subAdministrativeArea}';
+      });
+    }).catchError((e) {
+      debugPrint(e);
+    });
+  }
 
   setLoader() async {
     await Future.delayed(
@@ -35,6 +68,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     setLoader();
+    _getCurrentPosition(context);
   }
 
   @override
@@ -99,20 +133,21 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               titleSpacing: 2,
             ),
-            body: const SingleChildScrollView(
+            body: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  BannerWidget(),
-                  CategoryWidgetItems(),
-                  ChipWidget(),
-                  ProductPage(),
-                  CategoryTitleWidget(title: "Men's Products"),
-                  SizedBox(height: 5),
-                  MenProducts(),
-                  CategoryTitleWidget(title: "Women's Products"),
-                  SizedBox(height: 5),
-                  WomenProducts(),
+                  Text(_currentAddress.toString()),
+                  const BannerWidget(),
+                  const CategoryWidgetItems(),
+                  const ChipWidget(),
+                  const ProductPage(),
+                  const CategoryTitleWidget(title: "Men's Products"),
+                  const SizedBox(height: 5),
+                  const MenProducts(),
+                  const CategoryTitleWidget(title: "Women's Products"),
+                  const SizedBox(height: 5),
+                  const WomenProducts(),
                 ],
               ),
             ),

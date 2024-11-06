@@ -35,7 +35,7 @@ class ShimmerItem extends StatelessWidget {
             baseColor: Colors.grey.shade300,
             highlightColor: Colors.grey.shade200,
             child: SizedBox(
-              height: 200,
+              height: 150,
               width: MediaQuery.of(context).size.width,
               child: ListView.builder(
                   scrollDirection: Axis.horizontal,
@@ -44,7 +44,7 @@ class ShimmerItem extends StatelessWidget {
                   itemCount: 4,
                   itemBuilder: (context, index) {
                     return const Padding(
-                      padding: EdgeInsets.only(left: 15, top: 10),
+                      padding: EdgeInsets.only(left: 10, top: 10),
                       child: CircleAvatar(
                         radius: 150,
                       ),
@@ -53,7 +53,7 @@ class ShimmerItem extends StatelessWidget {
             ),
           ),
           SizedBox(
-            height: 400,
+            height: 200,
             width: MediaQuery.of(context).size.width,
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -73,7 +73,7 @@ class ShimmerItem extends StatelessWidget {
                           children: [
                             SizedBox(
                               width: 120.0,
-                              height: 50.0,
+                              height: 70.0,
                               child: Shimmer.fromColors(
                                 baseColor: Colors.grey.shade300,
                                 highlightColor: Colors.grey.shade200,
@@ -91,8 +91,6 @@ class ShimmerItem extends StatelessWidget {
                             Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                // Shimmer Placeholder for Photo Image
-
                                 SizedBox(
                                   width: 120.0,
                                   height: 100.0,
@@ -111,65 +109,50 @@ class ShimmerItem extends StatelessWidget {
                                     ),
                                   ),
                                 ),
-                                // const SizedBox(
-                                //   width: 12,
-                                // ),
-                                // Expanded(
-                                //   child: Column(
-                                //     crossAxisAlignment: CrossAxisAlignment.start,
-                                //     mainAxisAlignment: MainAxisAlignment.start,
-                                //     children: [
-                                //       // Shimmer for Photo Title
-                                //       Shimmer.fromColors(
-                                //         baseColor: Colors.grey.shade300,
-                                //         highlightColor: Colors.grey.shade200,
-                                //         child: Container(
-                                //           height: 20,
-                                //           decoration: BoxDecoration(
-                                //             borderRadius:
-                                //                 BorderRadius.circular(12.0),
-                                //             color: Colors.white,
-                                //           ),
-                                //         ),
-                                //       ),
-                                //       const SizedBox(
-                                //         height: 8,
-                                //       ),
-                                //       // Shimmer for Description
-                                //       Shimmer.fromColors(
-                                //         baseColor: Colors.grey.shade300,
-                                //         highlightColor: Colors.grey.shade200,
-                                //         child: Container(
-                                //           height: 20,
-                                //           width: 100,
-                                //           decoration: BoxDecoration(
-                                //             borderRadius:
-                                //                 BorderRadius.circular(12.0),
-                                //             color: Colors.white,
-                                //           ),
-                                //         ),
-                                //       ),
-                                //       const SizedBox(
-                                //         height: 8,
-                                //       ),
-                                //       // Shimmer for Another Description
-                                //       Shimmer.fromColors(
-                                //         baseColor: Colors.grey.shade300,
-                                //         highlightColor: Colors.grey.shade200,
-                                //         child: Container(
-                                //           height: 20,
-                                //           width: 50,
-                                //           decoration: BoxDecoration(
-                                //             borderRadius:
-                                //                 BorderRadius.circular(12.0),
-                                //             color: Colors.white,
-                                //           ),
-                                //         ),
-                                //       ),
-                                //     ],
-                                //   ),
-                                // )
                               ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  }),
+            ),
+          ),
+          SizedBox(
+            height: 200,
+            width: MediaQuery.of(context).size.width,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  shrinkWrap: true,
+                  itemCount: 3,
+                  itemBuilder: (context, index) {
+                    return Shimmer.fromColors(
+                      baseColor: Colors.grey.shade300,
+                      highlightColor: Colors.grey.shade200,
+                      child: Container(
+                        height: 100,
+                        padding: const EdgeInsets.symmetric(vertical: 8),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(
+                              width: 120.0,
+                              height: 100.0,
+                              child: Shimmer.fromColors(
+                                baseColor: Colors.grey.shade300,
+                                highlightColor: Colors.grey.shade200,
+                                child: Container(
+                                  margin: EdgeInsets.only(left: 10),
+                                  width: 60,
+                                  height: 60,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(12.0),
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
                             ),
                           ],
                         ),
