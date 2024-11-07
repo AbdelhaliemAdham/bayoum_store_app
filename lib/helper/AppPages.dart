@@ -8,6 +8,7 @@ import 'package:bayoum_store_app/screens/MainScreens/onboarding_register.dart';
 import 'package:bayoum_store_app/screens/MainScreens/profile_screen.dart';
 import 'package:bayoum_store_app/screens/MainScreens/searchscreen.dart';
 import 'package:bayoum_store_app/screens/MainScreens/categoryscreen.dart';
+import 'package:bayoum_store_app/screens/MainScreens/splash_screen.dart';
 import 'package:bayoum_store_app/screens/auth/RegisterPage.dart';
 import 'package:bayoum_store_app/screens/auth/SignOutScreen.dart';
 import 'package:bayoum_store_app/screens/auth/login.dart';
@@ -43,7 +44,13 @@ class AppPages {
   static String chatScreen = '/chatScreen';
   static String editProfileScreen = '/editProfileScreen';
   static String profileScreen = '/profileScreen';
+  static String splashScreen = '/splashScreen';
   static final routes = [
+    GetPage(
+      name: splashScreen,
+      page: () => const FlutterNativeSplash(),
+      binding: GlobalBindings(),
+    ),
     GetPage(
       name: profileScreen,
       page: () => const ProfileScreen(),

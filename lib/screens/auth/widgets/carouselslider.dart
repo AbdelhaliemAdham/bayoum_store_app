@@ -42,26 +42,23 @@ class _BannerWidgetState extends State<BannerWidget> {
         height: 200.0,
         reverse: false,
         autoPlay: true,
-        autoPlayInterval: const Duration(seconds: 7),
+        autoPlayInterval: const Duration(seconds: 5),
         autoPlayAnimationDuration: const Duration(milliseconds: 1000),
         autoPlayCurve: Curves.fastOutSlowIn,
         enlargeCenterPage: false,
         scrollDirection: Axis.horizontal,
       ),
       items: _bannerImage.map((i) {
-        return ClipRRect(
-          borderRadius: BorderRadius.circular(12),
-          child: Container(
-            margin: EdgeInsets.symmetric(horizontal: 5),
-            width: MediaQuery.of(context).size.width,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(15),
-            ),
-            child: CachedNetworkImage(
-              imageUrl: i,
-              fit: BoxFit.contain,
-              errorWidget: (context, url, d) => const Icon(Icons.error),
-            ),
+        return Container(
+          margin: const EdgeInsets.symmetric(horizontal: 5),
+          width: MediaQuery.of(context).size.width,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(15),
+          ),
+          child: CachedNetworkImage(
+            imageUrl: i,
+            fit: BoxFit.contain,
+            errorWidget: (context, url, d) => const Icon(Icons.error),
           ),
         );
       }).toList(),

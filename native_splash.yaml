@@ -1,13 +1,12 @@
 flutter_native_splash:
   android: true
   ios: true
-  image: assets/images/store.png
-  color: "#d4e4ed"
+  image: assets/images/ecommerce.png
+  color: "#ffffff"
   background_image: assets/images/background.png
   android_12:
     android: true
     ios: true
-    color: "#d4e4ed"
-    image: assets/images/store.png
-    branding: assets/images/store.png
+    color: "#ffffff"
+    image: assets/images/ecommerce.png
     background_image: assets/images/background.png

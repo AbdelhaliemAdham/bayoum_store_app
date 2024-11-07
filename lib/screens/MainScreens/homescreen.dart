@@ -47,7 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
       Placemark place = placemarks[0];
       setState(() {
         _currentAddress =
-            '${place.street}, ${place.subLocality}, ${place.subAdministrativeArea}';
+            '${place.subAdministrativeArea}, ${place.administrativeArea}';
       });
     }).catchError((e) {
       debugPrint(e);
@@ -56,7 +56,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   setLoader() async {
     await Future.delayed(
-      const Duration(seconds: 4),
+      const Duration(seconds: 3),
     ).whenComplete(() {
       setState(() {
         isLoading = false;
@@ -89,7 +89,7 @@ class _HomeScreenState extends State<HomeScreen> {
           )
         : Scaffold(
             appBar: AppBar(
-              centerTitle: true,
+              automaticallyImplyLeading: false,
               title: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Row(
@@ -99,14 +99,15 @@ class _HomeScreenState extends State<HomeScreen> {
                       children: [
                         Image.asset(
                           Assets.store,
-                          scale: 11,
+                          scale: 13,
                         ),
                         const SizedBox(width: 5),
                         const Text(
                           'Bayoum Store',
                           style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.w500,
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.red,
                             fontFamily: 'Dm Sans',
                           ),
                         ),
@@ -137,7 +138,22 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(_currentAddress.toString()),
+                  _currentAddress == null
+                      ? const SizedBox.shrink()
+                      : Row(
+                          children: [
+                            const SizedBox(width: 10),
+                            Image.asset(Assets.location, height: 25, width: 25),
+                            const SizedBox(width: 10),
+                            Text(
+                              'Current Location:  ${_currentAddress.toString()}',
+                              style: const TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w700,
+                                  color: Colors.blueGrey),
+                            ),
+                          ],
+                        ),
                   const BannerWidget(),
                   const CategoryWidgetItems(),
                   const ChipWidget(),

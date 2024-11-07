@@ -24,4 +24,5 @@ class Assets {
   static const String category = 'assets/images/category.png';
   static const String detective = 'assets/images/detective.png';
   static const String store = 'assets/images/store.png';
+  static const String location = 'assets/images/location.png';
 }

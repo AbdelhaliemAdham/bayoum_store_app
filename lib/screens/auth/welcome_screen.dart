@@ -3,7 +3,6 @@ import 'package:bayoum_store_app/screens/auth/login.dart';
 import 'package:external_app_launcher/external_app_launcher.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class FirstScreen extends StatefulWidget {
   const FirstScreen({super.key});
@@ -13,16 +12,6 @@ class FirstScreen extends StatefulWidget {
 }
 
 class _FirstScreenState extends State<FirstScreen> {
-  void openExternalApp(String text) async {
-    String url =
-        'const url = "https://wa.me/?text=$text";'; // استبدل هذا بالرابط الخاص بالتطبيق
-    if (await canLaunchUrl(Uri.parse(url))) {
-      await launchUrl(Uri.parse(url));
-    } else {
-      throw 'لا يمكن فتح التطبيق';
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -154,10 +143,9 @@ Widget _body() {
         padding: const EdgeInsets.symmetric(horizontal: 10.0),
         child: ElevatedButton(
           onPressed: () async {
-            if (LaunchApp.isAppInstalled()) {
+            if (await LaunchApp.isAppInstalled()) {
               await LaunchApp.openApp(
-                androidPackageName: 'com.bayoum vendor',
-                openStore: true,
+                androidPackageName: 'com.facebook.katana',
               );
             }
           },

@@ -1,7 +1,5 @@
-import 'package:bayoum_store_app/controlller/services/services.dart';
 import 'package:bayoum_store_app/firebase_options.dart';
 import 'package:bayoum_store_app/helper/AppPages.dart';
-import 'package:bayoum_store_app/helper/location.dart';
 import 'package:bayoum_store_app/helper/math.dart';
 
 import 'package:firebase_core/firebase_core.dart';
@@ -9,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:get/get.dart';
 
 import 'helper/binding.dart';
@@ -19,7 +16,6 @@ void main() async {
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   Get.put(MyMath());
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  Stripe.publishableKey = publishableKey;
   runApp(const ProviderScope(child: MyApp()));
 }
 
@@ -52,11 +48,12 @@ class _MyAppState extends State<MyApp> {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       initialBinding: GlobalBindings(),
-      initialRoute: AppPages.authGate,
+      initialRoute: AppPages.splashScreen,
       title: 'Bayoum-Store',
       theme: ThemeData(
         fontFamily: 'Dosis',
         appBarTheme: const AppBarTheme(
+          backgroundColor: Colors.white,
           iconTheme: IconThemeData(color: Colors.orangeAccent),
         ),
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blueAccent),
