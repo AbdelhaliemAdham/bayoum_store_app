@@ -1,6 +1,5 @@
 import 'package:bayoum_store_app/firebase_options.dart';
 import 'package:bayoum_store_app/helper/AppPages.dart';
-import 'package:bayoum_store_app/helper/math.dart';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +13,6 @@ import 'helper/binding.dart';
 void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
-  Get.put(MyMath());
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(const ProviderScope(child: MyApp()));
 }

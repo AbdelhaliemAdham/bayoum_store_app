@@ -1,6 +1,5 @@
 import 'package:bayoum_store_app/helper/AppPages.dart';
 import 'package:bayoum_store_app/helper/fontthemes.dart';
-import 'package:bayoum_store_app/helper/shared_prefrences.dart';
 import 'package:bayoum_store_app/screens/auth/welcome_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -21,11 +20,6 @@ class _AccountScreenState extends State<AccountScreen> {
   late String photo;
   late String phoneNumber;
   late SharedPreferences prefs;
-  @override
-  void initState() {
-    super.initState();
-    getBuyerDataFromSharedPref();
-  }
 
   isLogin() {
     String? uid = FirebaseAuth.instance.currentUser!.uid;
@@ -33,12 +27,6 @@ class _AccountScreenState extends State<AccountScreen> {
       return false;
     }
     return true;
-  }
-
-  getBuyerDataFromSharedPref() async {
-    _email = await CashData.getSharedData(key: 'email') as String;
-    _name = await CashData.getSharedData(key: 'fullName') as String;
-    photo = await CashData.getSharedData(key: 'photo') as String;
   }
 
   @override

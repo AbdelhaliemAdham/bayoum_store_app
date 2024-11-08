@@ -1,79 +1,92 @@
+import 'dart:convert';
+
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 class UserModel {
-  int id;
-  String? username;
-  Name name;
-  String password;
+  String? buyerId;
+  String fullName;
+  String? password;
   String email;
-  String phone;
-  Address? address;
+  String? phoneNumber;
+  String photo;
   UserModel({
-    required this.id,
-    required this.name,
-    required this.password,
+    this.buyerId,
+    required this.fullName,
+    this.password,
     required this.email,
-    required this.phone,
-    this.address,
-    this.username='abdelhaliem67',
+    this.phoneNumber,
+    required this.photo,
   });
-  factory UserModel.fromJson(Map<String, dynamic> json) {
+
+  UserModel copyWith({
+    String? buyerId,
+    String? fullName,
+    String? password,
+    String? email,
+    String? phoneNumber,
+    String? photo,
+  }) {
     return UserModel(
-      username: json['username'],
-      id: json['id'],
-      address: Address(
-        geolocation: Geolocation(
-          lang: json['address']['geolocation']['long'],
-          lat: json['address']['geolocation']['lat'],
-        ),
-        city: json['address']['city'],
-        zipcode: json['address']['zipcode'],
-        street: json['address']['street'],
-      ),
-      name: Name(
-          firstName: json['name']['firstname'],
-          lastName: json['name']['lastname']),
-      email: json['email'],
-      password: json['password'],
-      phone: json['phone'],
+      buyerId: buyerId ?? this.buyerId,
+      fullName: fullName ?? this.fullName,
+      password: password ?? this.password,
+      email: email ?? this.email,
+      phoneNumber: phoneNumber ?? this.phoneNumber,
+      photo: photo ?? this.photo,
     );
   }
 
   Map<String, dynamic> toMap() {
-    return {
-      'name': name,
-      'email': email,
+    return <String, dynamic>{
+      'buyerId': buyerId,
+      'fullName': fullName,
       'password': password,
-      'phone': phone,
+      'email': email,
+      'phoneNumber': phoneNumber,
+      'photo': photo,
     };
   }
-}
 
-class Name {
-  String firstName;
-  String lastName;
-  Name({
-    required this.firstName,
-    required this.lastName,
-  });
-}
+  factory UserModel.fromMap(Map<String, dynamic> map) {
+    return UserModel(
+      buyerId: map['buyerId'] != null ? map['buyerId'] as String : null,
+      fullName: map['fullName'] as String,
+      password: map['password'] != null ? map['password'] as String : null,
+      email: map['email'] as String,
+      phoneNumber:
+          map['phoneNumber'] != null ? map['phoneNumber'] as String : null,
+      photo: map['photo'] as String,
+    );
+  }
 
-class Address {
-  String? city;
-  String? street;
-  String? zipcode;
-  Geolocation? geolocation;
-  Address({
-    this.city,
-    this.street,
-    this.zipcode,
-    this.geolocation,
-  });
-}
+  String toJson() => json.encode(toMap());
 
-class Geolocation {
-  String? lat;
-  String? lang;
-  Geolocation({
-    this.lat,
-    this.lang,
-  });
+  factory UserModel.fromJson(String source) =>
+      UserModel.fromMap(json.decode(source) as Map<String, dynamic>);
+
+  @override
+  String toString() {
+    return 'UserModel(buyerId: $buyerId, fullName: $fullName, password: $password, email: $email, phoneNumber: $phoneNumber, photo: $photo)';
+  }
+
+  @override
+  bool operator ==(covariant UserModel other) {
+    if (identical(this, other)) return true;
+
+    return other.buyerId == buyerId &&
+        other.fullName == fullName &&
+        other.password == password &&
+        other.email == email &&
+        other.phoneNumber == phoneNumber &&
+        other.photo == photo;
+  }
+
+  @override
+  int get hashCode {
+    return buyerId.hashCode ^
+        fullName.hashCode ^
+        password.hashCode ^
+        email.hashCode ^
+        phoneNumber.hashCode ^
+        photo.hashCode;
+  }
 }

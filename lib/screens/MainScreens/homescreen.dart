@@ -27,6 +27,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Position? _currentPosition;
   String? message;
   List<Placemark> placemarks = [];
+  bool canPoob = false;
 
   Future<void> _getCurrentPosition(BuildContext context) async {
     final hasPermission = await GetLocation.handleLocationPermission();
@@ -87,84 +88,141 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           )
-        : Scaffold(
-            appBar: AppBar(
-              automaticallyImplyLeading: false,
-              title: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        Image.asset(
-                          Assets.store,
-                          scale: 13,
+        : PopScope(
+            canPop: canPoob,
+            onPopInvoked: (value) async {
+              await showDialog(
+                  context: context,
+                  builder: (context) {
+                    return AlertDialog(
+                      actionsAlignment: MainAxisAlignment.center,
+                      backgroundColor: Colors.white,
+                      title: const Text(
+                        'Are you sure you want to exit ?',
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
                         ),
-                        const SizedBox(width: 5),
-                        const Text(
-                          'Bayoum Store',
-                          style: TextStyle(
-                            fontSize: 22,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.red,
-                            fontFamily: 'Dm Sans',
+                      ),
+                      actions: <Widget>[
+                        TextButton(
+                          onPressed: () {
+                            setState(() {
+                              canPoob = true;
+                              Navigator.of(context).pop(true);
+                            });
+                            Navigator.pop(context);
+                          },
+                          child: const Text(
+                            'Yes',
+                            style: TextStyle(
+                              fontSize: 18,
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            setState(() {
+                              canPoob = false;
+                              Navigator.of(context).pop(canPoob);
+                            });
+                          },
+                          child: const Text(
+                            'No',
+                            style: TextStyle(
+                              fontSize: 18,
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
                       ],
-                    ),
-                    Container(
-                      decoration: const BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.red,
+                    );
+                  });
+            },
+            child: Scaffold(
+              appBar: AppBar(
+                automaticallyImplyLeading: false,
+                title: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          Image.asset(
+                            Assets.store,
+                            scale: 13,
+                          ),
+                          const SizedBox(width: 5),
+                          const Text(
+                            'Bayoum Store',
+                            style: TextStyle(
+                              fontSize: 22,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.red,
+                              fontFamily: 'Dm Sans',
+                            ),
+                          ),
+                        ],
                       ),
-                      child: IconButton(
-                        color: Colors.white,
-                        onPressed: () async {
-                          await showSearch(
-                            context: context,
-                            delegate: SearchDelegateBar(),
-                          );
-                        },
-                        icon: const Icon(Icons.search),
+                      Container(
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.red,
+                        ),
+                        child: IconButton(
+                          color: Colors.white,
+                          onPressed: () async {
+                            await showSearch(
+                              context: context,
+                              delegate: SearchDelegateBar(),
+                            );
+                          },
+                          icon: const Icon(Icons.search),
+                        ),
                       ),
-                    ),
+                    ],
+                  ),
+                ),
+                titleSpacing: 2,
+              ),
+              body: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _currentAddress == null
+                        ? const SizedBox.shrink()
+                        : Row(
+                            children: [
+                              const SizedBox(width: 10),
+                              Image.asset(Assets.location,
+                                  height: 25, width: 25),
+                              const SizedBox(width: 10),
+                              Text(
+                                'Current Location:  ${_currentAddress.toString()}',
+                                style: const TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w700,
+                                    color: Colors.blueGrey),
+                              ),
+                            ],
+                          ),
+                    const BannerWidget(),
+                    const CategoryWidgetItems(),
+                    const ChipWidget(),
+                    const ProductPage(),
+                    const CategoryTitleWidget(title: "Men's Products"),
+                    const SizedBox(height: 5),
+                    const MenProducts(),
+                    const CategoryTitleWidget(title: "Women's Products"),
+                    const SizedBox(height: 5),
+                    const WomenProducts(),
                   ],
                 ),
-              ),
-              titleSpacing: 2,
-            ),
-            body: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _currentAddress == null
-                      ? const SizedBox.shrink()
-                      : Row(
-                          children: [
-                            const SizedBox(width: 10),
-                            Image.asset(Assets.location, height: 25, width: 25),
-                            const SizedBox(width: 10),
-                            Text(
-                              'Current Location:  ${_currentAddress.toString()}',
-                              style: const TextStyle(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.w700,
-                                  color: Colors.blueGrey),
-                            ),
-                          ],
-                        ),
-                  const BannerWidget(),
-                  const CategoryWidgetItems(),
-                  const ChipWidget(),
-                  const ProductPage(),
-                  const CategoryTitleWidget(title: "Men's Products"),
-                  const SizedBox(height: 5),
-                  const MenProducts(),
-                  const CategoryTitleWidget(title: "Women's Products"),
-                  const SizedBox(height: 5),
-                  const WomenProducts(),
-                ],
               ),
             ),
           );

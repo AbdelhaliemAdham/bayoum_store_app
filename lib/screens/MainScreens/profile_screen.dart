@@ -1,11 +1,11 @@
 import 'package:bayoum_store_app/helper/assets.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../helper/AppPages.dart';
-import '../../helper/shared_prefrences.dart';
 import '../auth/welcome_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -16,20 +16,6 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  String? email;
-  String? name;
-  String? photo;
-  bool darkMode = false;
-
-  @override
-  void initState() {
-    super.initState();
-    CashData.initializeSharedPrefrences();
-    WidgetsBinding.instance.addPostFrameCallback((_) => CashData.updateBuyer());
-    WidgetsBinding.instance
-        .addPostFrameCallback((_) => getBuyerDataFromSharedPref());
-  }
-
   isLogin() {
     String? uid = FirebaseAuth.instance.currentUser!.uid;
     if (uid.isEmpty) {
@@ -38,12 +24,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return true;
   }
 
-  getBuyerDataFromSharedPref() async {
-    email = await CashData.getSharedData(key: 'email') as String;
-    name = await CashData.getSharedData(key: 'fullName') as String;
-    photo = await CashData.getSharedData(key: 'photo') as String;
-    setState(() {});
-  }
+  Future<DocumentSnapshot<Map<String, dynamic>>> buyersCollection =
+      FirebaseFirestore.instance
+          .collection('buyers')
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .get();
 
   @override
   Widget build(BuildContext context) {
@@ -61,86 +46,100 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
         ),
       ),
-      body: Expanded(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Expanded(
-              flex: 4,
-              child: Center(
-                child: Container(
-                  padding: const EdgeInsets.only(right: 10),
-                  width: MediaQuery.of(context).size.width - 25,
-                  decoration: BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.5),
-                        blurRadius: 12,
-                        spreadRadius: 6,
+      body: FutureBuilder(
+        future: buyersCollection,
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return const Center(
+              child: Text('Some thing wrong happened'),
+            );
+          }
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          final data = snapshot.data!.data() as Map<String, dynamic>;
+          return Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Expanded(
+                  flex: 4,
+                  child: Center(
+                    child: Container(
+                      padding: const EdgeInsets.only(right: 10),
+                      width: MediaQuery.of(context).size.width - 25,
+                      decoration: BoxDecoration(
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.5),
+                            blurRadius: 12,
+                            spreadRadius: 6,
+                          ),
+                          const BoxShadow(
+                            color: Colors.white,
+                          ),
+                        ],
+                        color: const Color(0xffEF4637),
+                        borderRadius: BorderRadius.circular(5),
                       ),
-                      const BoxShadow(
-                        color: Colors.white,
+                      child: firstContainer(
+                        name: data['fullName'],
+                        email: data['email'],
+                        photo: data['photo'],
                       ),
-                    ],
-                    color: const Color(0xffEF4637),
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  child: firstContainer(
-                    name: name,
-                    email: email,
-                    photo: photo,
+                    ),
                   ),
                 ),
-              ),
-            ),
-            Expanded(
-              flex: 11,
-              child: Container(
-                margin:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-                width: MediaQuery.of(context).size.width - 25,
-                decoration: BoxDecoration(
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.5),
-                      blurRadius: 1,
-                      spreadRadius: 1,
-                    ),
-                    const BoxShadow(
+                Expanded(
+                  flex: 11,
+                  child: Container(
+                    margin: const EdgeInsets.symmetric(
+                        horizontal: 10, vertical: 15),
+                    width: MediaQuery.of(context).size.width - 25,
+                    decoration: BoxDecoration(
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.5),
+                          blurRadius: 1,
+                          spreadRadius: 1,
+                        ),
+                        const BoxShadow(
+                          color: Colors.white,
+                        ),
+                      ],
                       color: Colors.white,
+                      borderRadius: BorderRadius.circular(5),
                     ),
-                  ],
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(5),
+                    child: SecondContainer(),
+                  ),
                 ),
-                child: SecondContainer(),
-              ),
-            ),
-            const textWidget(),
-            Expanded(
-              flex: 5,
-              child: Container(
-                margin: const EdgeInsets.symmetric(vertical: 10),
-                width: MediaQuery.of(context).size.width - 25,
-                decoration: BoxDecoration(
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.5),
-                      blurRadius: 1,
-                      spreadRadius: 1,
-                    ),
-                    const BoxShadow(
+                const textWidget(),
+                Expanded(
+                  flex: 5,
+                  child: Container(
+                    margin: const EdgeInsets.symmetric(vertical: 10),
+                    width: MediaQuery.of(context).size.width - 25,
+                    decoration: BoxDecoration(
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.5),
+                          blurRadius: 1,
+                          spreadRadius: 1,
+                        ),
+                        const BoxShadow(
+                          color: Colors.white,
+                        ),
+                      ],
                       color: Colors.white,
+                      borderRadius: BorderRadius.circular(5),
                     ),
-                  ],
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(5),
+                    child: const lastContainer(),
+                  ),
                 ),
-                child: const lastContainer(),
-              ),
+              ],
             ),
-          ],
-        ),
+          );
+        },
       ),
     );
   }
