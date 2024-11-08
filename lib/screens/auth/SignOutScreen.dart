@@ -1,11 +1,11 @@
 import 'dart:io';
 
 import 'package:bayoum_store_app/controlller/auth_controller.dart';
+import 'package:bayoum_store_app/helper/assets.dart';
 import 'package:bayoum_store_app/screens/auth/welcome_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:step_progress_indicator/step_progress_indicator.dart';
 
 import 'package:bayoum_store_app/screens/auth/widgets/textformfield.dart';
 
@@ -91,6 +91,16 @@ class _SignOutScreenState extends State<SignOutScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
+        title: const Text(
+          'Create New Account',
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            fontFamily: 'Dm Sans',
+            color: Colors.grey,
+          ),
+        ),
         elevation: 0,
         backgroundColor: Colors.transparent,
       ),
@@ -101,15 +111,6 @@ class _SignOutScreenState extends State<SignOutScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Text(
-                'Sign Out as ${arguments ?? ''}',
-                style: const TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.orangeAccent,
-                ),
-              ),
-              const SizedBox(height: 20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -220,19 +221,37 @@ class _SignOutScreenState extends State<SignOutScreen> {
                             );
                           });
                     },
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(50),
-                      child: imageGetPicked == false
-                          ? const Icon(
-                              Icons.add_a_photo,
-                              size: (120),
-                            )
-                          : Image.file(
-                              image!,
-                              width: 120,
-                              height: 120,
-                              fit: BoxFit.fill,
+                    child: Stack(
+                      children: [
+                        CircleAvatar(
+                          radius: 60,
+                          backgroundImage: imageGetPicked
+                              ? FileImage(image!) as ImageProvider
+                              : const AssetImage(Assets.person),
+                        ),
+                        Positioned(
+                          top: 85,
+                          left: 93,
+                          child: InkWell(
+                            onTap: () async {
+                              await _pickImageFromCamera();
+                            },
+                            child: Container(
+                              height: 25,
+                              width: 25,
+                              decoration: BoxDecoration(
+                                color: Colors.redAccent,
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                              child: const Icon(
+                                Icons.edit,
+                                size: 15,
+                                color: Colors.white,
+                              ),
                             ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
@@ -251,7 +270,7 @@ class _SignOutScreenState extends State<SignOutScreen> {
                     }
                     return null;
                   }),
-              const SizedBox(height: 20),
+              const SizedBox(height: 15),
               CustomFormField(
                   labelText: "lastName",
                   onChanged: (value) {
@@ -265,7 +284,7 @@ class _SignOutScreenState extends State<SignOutScreen> {
                     }
                     return null;
                   }),
-              const SizedBox(height: 20),
+              const SizedBox(height: 15),
               CustomFormField(
                 onChanged: (value) {
                   if (value!.isNotEmpty) {
@@ -285,7 +304,7 @@ class _SignOutScreenState extends State<SignOutScreen> {
                   }
                 },
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 15),
               CustomFormField(
                 labelText: 'Password',
                 obscureText: true,
@@ -302,7 +321,7 @@ class _SignOutScreenState extends State<SignOutScreen> {
                   return null;
                 },
               ),
-              const SizedBox(height: 25),
+              const SizedBox(height: 15),
               CustomFormField(
                 onChanged: (value) {
                   if (value!.isNotEmpty) {
@@ -318,60 +337,47 @@ class _SignOutScreenState extends State<SignOutScreen> {
                   return null;
                 },
               ),
-              const SizedBox(height: 20),
-              showProgressBar
-                  ? Center(
-                      child: CircularStepProgressIndicator(
-                        totalSteps: 100,
-                        currentStep: 74,
-                        stepSize: 10,
-                        selectedColor: Colors.deepOrangeAccent,
-                        unselectedColor: Colors.grey[200],
-                        padding: 0,
-                        width: 150,
-                        height: 150,
-                        selectedStepSize: 15,
-                        roundedCap: (_, __) => true,
-                      ),
-                    )
-                  : Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: OutlinedButton(
-                        style: ButtonStyle(
-                          shadowColor:
-                              const MaterialStatePropertyAll(Colors.grey),
-                          elevation: MaterialStateProperty.all<double?>(5),
-                          padding:
-                              MaterialStateProperty.all<EdgeInsetsGeometry?>(
-                            const EdgeInsets.symmetric(
-                                horizontal: 36, vertical: 18),
-                          ),
-                          shape: MaterialStateProperty.all<OutlinedBorder>(
-                              RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(13),
-                            side: BorderSide.none,
-                          )),
-                          textStyle: MaterialStateProperty.all<TextStyle?>(
-                            const TextStyle(color: Colors.white),
-                          ),
-                          backgroundColor:
-                              MaterialStateProperty.all(Colors.orangeAccent),
-                        ),
-                        onPressed: () {
-                          if (formKey.currentState!.validate()) {
-                            _submit();
-                          } else {
-                            HelperFun.showSnackBarWidegt(
-                              'Please type all the data required to register',
-                              'Error',
-                            );
-                          }
-                        },
-                        child: const Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Text(
-                              'Sign Out',
+              const SizedBox(height: 15),
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: OutlinedButton(
+                  style: ButtonStyle(
+                    shadowColor: const MaterialStatePropertyAll(Colors.grey),
+                    elevation: MaterialStateProperty.all<double?>(5),
+                    padding: MaterialStateProperty.all<EdgeInsetsGeometry?>(
+                      const EdgeInsets.symmetric(horizontal: 36, vertical: 18),
+                    ),
+                    shape: MaterialStateProperty.all<OutlinedBorder>(
+                        RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(13),
+                      side: BorderSide.none,
+                    )),
+                    textStyle: MaterialStateProperty.all<TextStyle?>(
+                      const TextStyle(color: Colors.white),
+                    ),
+                    backgroundColor: MaterialStateProperty.all(Colors.red),
+                  ),
+                  onPressed: () {
+                    if (formKey.currentState!.validate()) {
+                      _submit();
+                    } else {
+                      HelperFun.showSnackBarWidegt(
+                        'Please type all the data required to register',
+                        'Error',
+                      );
+                    }
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      showProgressBar
+                          ? const Center(
+                              child: CircularProgressIndicator(
+                                color: Colors.white,
+                              ),
+                            )
+                          : const Text(
+                              'Sign Up',
                               style: TextStyle(
                                 fontSize: 16,
                                 color: Colors.white,
@@ -379,10 +385,10 @@ class _SignOutScreenState extends State<SignOutScreen> {
                                 letterSpacing: 4,
                               ),
                             ),
-                          ],
-                        ),
-                      ),
-                    ),
+                    ],
+                  ),
+                ),
+              ),
             ],
           ),
         ),

@@ -5,11 +5,86 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:twitter_login/twitter_login.dart';
 
 class AuthController {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final GoogleSignIn _googleSignIn = GoogleSignIn(scopes: [
+    'email',
+    'https://www.googleapis.com/auth/user.birthday.read',
+    'https://www.googleapis.com/auth/user.gender.read',
+  ]);
   final FirebaseStorage _firebaseStorage = FirebaseStorage.instance;
+  Future<UserCredential> signInWithTwitter() async {
+    // Create a TwitterLogin instance
+    final twitterLogin = TwitterLogin(
+        apiKey: 'BLCkZkFXtvdAhhBJqu95DpNrx',
+        apiSecretKey: 'o0cVzP0MlyysZAJzlJuvARzuVkMkNEL6Lhgua3naMwAcETgjE9',
+        redirectURI: 'flutter-twitter-login://');
+
+    // Trigger the sign-in flow
+    final authResult = await twitterLogin.login();
+
+    // Create a credential from the access token
+    final twitterAuthCredential = TwitterAuthProvider.credential(
+      accessToken: authResult.authToken!,
+      secret: authResult.authTokenSecret!,
+    );
+
+    // Once signed in, return the UserCredential
+    var userCredential =
+        await FirebaseAuth.instance.signInWithCredential(twitterAuthCredential);
+    await _firestore.collection('buyers').doc(_auth.currentUser!.uid).set({
+      'fullName': _auth.currentUser!.displayName,
+      'email': _auth.currentUser!.email,
+      'phoneNumber': _auth.currentUser!.phoneNumber,
+      'photo': _auth.currentUser!.photoURL,
+    });
+    return userCredential;
+  }
+
+  Future<UserCredential?> singInWithGoogle() async {
+    try {
+      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+      // Obtain the auth details from the request
+      final GoogleSignInAuthentication? googleAuth =
+          await googleUser?.authentication;
+
+      // Create a new credential
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth?.accessToken,
+        idToken: googleAuth?.idToken,
+      );
+
+      // Once signed in, return the UserCredential
+      return await FirebaseAuth.instance.signInWithCredential(credential);
+    } on FirebaseAuthException catch (e) {
+      debugPrint(e.toString());
+      Get.showSnackbar(
+        GetSnackBar(
+          title: 'Google Sign In',
+          message: e.toString(),
+          duration: const Duration(seconds: 4),
+          dismissDirection: DismissDirection.horizontal,
+          isDismissible: true,
+        ),
+      );
+    }
+    Get.showSnackbar(
+      const GetSnackBar(
+        title: 'Google Sign In',
+        message: 'error while sign in with google sign in method',
+        duration: Duration(seconds: 2),
+        dismissDirection: DismissDirection.horizontal,
+        isDismissible: true,
+      ),
+    );
+    return null;
+  }
 
   Future<String> uploadImageToStorage(File? file) async {
     UploadTask uploadTask = _firebaseStorage

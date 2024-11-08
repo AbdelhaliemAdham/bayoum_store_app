@@ -1,8 +1,8 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:bayoum_store_app/helper/AppPages.dart';
+import 'package:bayoum_store_app/helper/assets.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:step_progress_indicator/step_progress_indicator.dart';
-
 import 'package:bayoum_store_app/helper/snackbar.dart';
 import 'package:bayoum_store_app/screens/MainScreens/mainscreen.dart';
 import 'package:bayoum_store_app/screens/auth/widgets/textformfield.dart';
@@ -27,6 +27,7 @@ class _CustomerLoginScreenState extends State<CustomerLoginScreen> {
 
   final formKey = GlobalKey<FormState>();
   bool isLoading = false;
+  bool singInWithGoogle = false;
 
   login(String email, String password) async {
     if (formKey.currentState!.validate()) {
@@ -62,129 +63,203 @@ class _CustomerLoginScreenState extends State<CustomerLoginScreen> {
         elevation: 0,
         backgroundColor: Colors.transparent,
       ),
-      body: isLoading
-          ? Center(
-              child: CircularStepProgressIndicator(
-                totalSteps: 100,
-                currentStep: 74,
-                stepSize: 10,
-                selectedColor: Colors.deepOrangeAccent,
-                unselectedColor: Colors.grey[200],
-                padding: 0,
-                width: 110,
-                height: 110,
-                selectedStepSize: 15,
-                roundedCap: (_, __) => true,
+      body: SingleChildScrollView(
+        child: Form(
+          key: formKey,
+          canPop: true,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              const Text('Hello Again!',
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+              const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Text('Welcome back  you”ve been missed!',
+                    style: TextStyle(
+                      fontSize: 16,
+                    )),
               ),
-            )
-          : SingleChildScrollView(
-              child: Form(
-                key: formKey,
-                canPop: true,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Text(
-                      'Sign In as ${widget.type ?? 'Buyer'}',
-                      style: const TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.orangeAccent,
-                        letterSpacing: 2,
-                      ),
+              const SizedBox(height: 50),
+              CustomFormField(
+                icon: Icons.email,
+                onChanged: (value) {
+                  if (value!.isNotEmpty) {
+                    setState(() => email = value);
+                  }
+                },
+                inputType: TextInputType.emailAddress,
+                labelText: 'Email',
+                validator: (String? value) {
+                  if (value != null &&
+                      RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                          .hasMatch(value)) {
+                    return null;
+                  }
+                  {
+                    return "Invalid email ";
+                  }
+                },
+              ),
+              const SizedBox(height: 16),
+              CustomFormField(
+                onChanged: (value) {
+                  setState(() {
+                    password = value;
+                  });
+                },
+                labelText: 'Password',
+                icon: Icons.person,
+                obscureText: true,
+                inputType: TextInputType.visiblePassword,
+                validator: (String? value) {
+                  if (value!.isEmpty) {
+                    return 'Please enter your password';
+                  } else if (value.isNotEmpty &&
+                      value.length >= 12 &&
+                      value.length <= 6) {
+                    return 'please enter password from from 6 to 12 numbers ';
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 50),
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: OutlinedButton(
+                  style: ButtonStyle(
+                    shadowColor: const MaterialStatePropertyAll(Colors.grey),
+                    elevation: MaterialStateProperty.all<double?>(5),
+                    padding: MaterialStateProperty.all<EdgeInsetsGeometry?>(
+                      const EdgeInsets.symmetric(horizontal: 36, vertical: 18),
                     ),
-                    const SizedBox(height: 50),
-                    CustomFormField(
-                      icon: Icons.email,
-                      onChanged: (value) {
-                        if (value!.isNotEmpty) {
-                          setState(() => email = value);
-                        }
-                      },
-                      inputType: TextInputType.emailAddress,
-                      labelText: 'Email',
-                      validator: (String? value) {
-                        if (value != null &&
-                            RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-                                .hasMatch(value)) {
-                          return null;
-                        }
-                        {
-                          return "Invalid email ";
-                        }
-                      },
+                    textStyle: MaterialStateProperty.all<TextStyle?>(
+                      const TextStyle(color: Colors.white),
                     ),
-                    const SizedBox(height: 16),
-                    CustomFormField(
-                      onChanged: (value) {
-                        setState(() {
-                          password = value;
-                        });
-                      },
-                      labelText: 'Password',
-                      icon: Icons.person,
-                      obscureText: true,
-                      inputType: TextInputType.visiblePassword,
-                      validator: (String? value) {
-                        if (value!.isEmpty) {
-                          return 'Please enter your password';
-                        } else if (value.isNotEmpty &&
-                            value.length >= 12 &&
-                            value.length <= 6) {
-                          return 'please enter password from from 6 to 12 numbers ';
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 50),
-                    Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: OutlinedButton(
-                        style: ButtonStyle(
-                          shadowColor:
-                              const MaterialStatePropertyAll(Colors.grey),
-                          elevation: MaterialStateProperty.all<double?>(5),
-                          padding:
-                              MaterialStateProperty.all<EdgeInsetsGeometry?>(
-                            const EdgeInsets.symmetric(
-                                horizontal: 36, vertical: 18),
-                          ),
-                          shape: MaterialStateProperty.all<OutlinedBorder>(
-                              RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(13),
-                            side: BorderSide.none,
-                          )),
-                          textStyle: MaterialStateProperty.all<TextStyle?>(
-                            const TextStyle(color: Colors.white),
-                          ),
-                          backgroundColor:
-                              MaterialStateProperty.all(Colors.orangeAccent),
-                        ),
-                        onPressed: () {
-                          if (formKey.currentState!.validate()) {
-                            login(email!, password!);
-                          }
-                        },
-                        child: const Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Text(
+                    backgroundColor: MaterialStateProperty.all(Colors.red),
+                  ),
+                  onPressed: () {
+                    if (formKey.currentState!.validate()) {
+                      login(email!, password!);
+                    }
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      isLoading
+                          ? const Center(
+                              child: CircularProgressIndicator(
+                                color: Colors.white,
+                              ),
+                            )
+                          : const Text(
                               'Login',
                               style: TextStyle(
-                                fontSize: 16,
+                                fontSize: 18,
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,
                                 letterSpacing: 4,
                               ),
                             ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
-            ),
+              const SizedBox(height: 60),
+              const Divider(
+                color: Colors.grey,
+                thickness: 0.3,
+                indent: 50,
+                endIndent: 50,
+              ),
+              const SizedBox(height: 30),
+              const Text(
+                'Or continue with',
+                style: TextStyle(
+                  fontSize: 13,
+                  color: Colors.red,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  InkWell(
+                    onTap: () async {
+                      var userCredential =
+                          await _authController.singInWithGoogle();
+                      if (userCredential != null) {
+                        Get.toNamed(AppPages.authGate);
+                      }
+                      return;
+                    },
+                    child: Container(
+                      height: 50,
+                      width: 50,
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        boxShadow: const [
+                          BoxShadow(
+                            color: Colors.grey,
+                            blurRadius: 2,
+                            spreadRadius: 2,
+                          )
+                        ],
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Image.asset(Assets.google),
+                    ),
+                  ),
+                  const SizedBox(width: 20),
+                  InkWell(
+                    onTap: () async {
+                      await _authController.signInWithTwitter();
+                      Get.toNamed(AppPages.authGate);
+                    },
+                    child: Container(
+                      height: 50,
+                      width: 50,
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        boxShadow: const [
+                          BoxShadow(
+                            color: Colors.grey,
+                            blurRadius: 2,
+                            spreadRadius: 2,
+                          )
+                        ],
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Image.asset(Assets.twitter),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 30),
+              InkWell(
+                onTap: () {
+                  Navigator.pushNamed(context, AppPages.signOutScreen);
+                },
+                child: RichText(
+                  text: const TextSpan(children: [
+                    TextSpan(
+                        text: "Don't have an account? ",
+                        style: TextStyle(color: Colors.grey)),
+                    TextSpan(
+                      text: "Sign up",
+                      style: TextStyle(
+                        color: Colors.red,
+                      ),
+                    ),
+                  ]),
+                ),
+              )
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

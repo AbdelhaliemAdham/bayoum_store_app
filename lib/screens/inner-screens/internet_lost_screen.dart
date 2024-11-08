@@ -28,7 +28,8 @@ class _InternetLostScreenState extends State<InternetLostScreen> {
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 20),
               child: Text(
-                'There is no internet connection',
+                'There is some wrong with internet connection, try to close the app',
+                textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 20,
                   color: Colors.grey,

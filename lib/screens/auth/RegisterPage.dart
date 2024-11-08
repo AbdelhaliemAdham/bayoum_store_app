@@ -52,15 +52,14 @@ class _footer extends StatelessWidget {
                 );
               },
               child: RichText(
-                text: TextSpan(
+                text: const TextSpan(
                   text: "Do you have an account ? ",
-                  style: const TextStyle(fontSize: 16, color: Colors.grey),
+                  style: TextStyle(fontSize: 16, color: Colors.grey),
                   children: <TextSpan>[
                     TextSpan(
                         text: ' Sign In',
-                        style: TextStyle(
-                            fontSize: 18, color: Colors.orangeAccent.shade400)),
-                    const TextSpan(
+                        style: TextStyle(fontSize: 18, color: Colors.red)),
+                    TextSpan(
                         text: ' with us !',
                         style: TextStyle(fontSize: 16, color: Colors.grey)),
                   ],
@@ -126,8 +125,7 @@ Widget _body() {
             ),
             alignment: Alignment.center,
             foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
-            backgroundColor:
-                MaterialStateProperty.all<Color>(Colors.orangeAccent.shade400),
+            backgroundColor: MaterialStateProperty.all<Color>(Colors.red),
           ),
           child: const Text(
             'Register as Buyer',
@@ -156,8 +154,7 @@ Widget _body() {
             ),
             alignment: Alignment.center,
             foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
-            backgroundColor:
-                MaterialStateProperty.all<Color>(Colors.orangeAccent.shade400),
+            backgroundColor: MaterialStateProperty.all<Color>(Colors.red),
           ),
           child: const Text(
             'Register as Vendor',

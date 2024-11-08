@@ -1,3 +1,4 @@
+import 'package:bayoum_store_app/helper/AppPages.dart';
 import 'package:bayoum_store_app/screens/auth/RegisterPage.dart';
 import 'package:bayoum_store_app/screens/auth/login.dart';
 import 'package:external_app_launcher/external_app_launcher.dart';
@@ -51,18 +52,18 @@ class _footer extends StatelessWidget {
                 );
               },
               child: RichText(
-                text: TextSpan(
+                text: const TextSpan(
                   text: "Don't have an account ? ",
-                  style: const TextStyle(fontSize: 16, color: Colors.grey),
+                  style: TextStyle(fontSize: 16, color: Colors.grey),
                   children: <TextSpan>[
-                    const TextSpan(
+                    TextSpan(
                         text: 'Please',
                         style: TextStyle(fontSize: 14, color: Colors.grey)),
                     TextSpan(
                         text: ' sign up',
-                        style: TextStyle(
-                            fontSize: 18, color: Colors.orangeAccent.shade400)),
-                    const TextSpan(
+                        style:
+                            const TextStyle(fontSize: 18, color: Colors.red)),
+                    TextSpan(
                         text: ' with us !',
                         style: TextStyle(fontSize: 16, color: Colors.grey)),
                   ],
@@ -112,13 +113,7 @@ Widget _body() {
         padding: const EdgeInsets.all(10.0),
         child: ElevatedButton(
           onPressed: () {
-            Get.to(
-              const CustomerLoginScreen(
-                type: 'Buyer',
-              ),
-              transition: Transition.fade,
-              curve: Curves.easeIn,
-            );
+            Get.toNamed(AppPages.customerLoginScreen);
           },
           style: ButtonStyle(
             minimumSize: const MaterialStatePropertyAll<Size>(
@@ -129,11 +124,10 @@ Widget _body() {
             ),
             alignment: Alignment.center,
             foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
-            backgroundColor:
-                MaterialStateProperty.all<Color>(Colors.orangeAccent.shade400),
+            backgroundColor: MaterialStateProperty.all<Color>(Colors.red),
           ),
           child: const Text(
-            'Login as Buyer',
+            'Login as Customer',
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           ),
         ),
@@ -158,8 +152,7 @@ Widget _body() {
             ),
             alignment: Alignment.center,
             foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
-            backgroundColor:
-                MaterialStateProperty.all<Color>(Colors.orangeAccent.shade400),
+            backgroundColor: MaterialStateProperty.all<Color>(Colors.red),
           ),
           child: const Text(
             'Login as Vendor',

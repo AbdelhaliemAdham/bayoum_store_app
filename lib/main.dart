@@ -48,7 +48,7 @@ class _MyAppState extends State<MyApp> {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       initialBinding: GlobalBindings(),
-      initialRoute: AppPages.splashScreen,
+      initialRoute: AppPages.customerRegisterScreen,
       title: 'Bayoum-Store',
       theme: ThemeData(
         fontFamily: 'Dosis',

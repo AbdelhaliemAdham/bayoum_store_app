@@ -25,4 +25,6 @@ class Assets {
   static const String detective = 'assets/images/detective.png';
   static const String store = 'assets/images/store.png';
   static const String location = 'assets/images/location.png';
+  static const String google = 'assets/images/google.png';
+  static const String twitter = 'assets/images/twitter.png';
 }

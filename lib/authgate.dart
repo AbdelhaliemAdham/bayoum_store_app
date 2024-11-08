@@ -53,7 +53,7 @@ class _AuthGateState extends State<AuthGate> {
 
             return const MainScreen();
           }
-          return const InternetLostScreen();
+          return const MainScreen();
         });
   }
 }
