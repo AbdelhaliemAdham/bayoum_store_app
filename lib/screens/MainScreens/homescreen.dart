@@ -1,3 +1,4 @@
+import 'package:bayoum_store_app/controlller/services/local_notification.dart';
 import 'package:bayoum_store_app/helper/assets.dart';
 import 'package:bayoum_store_app/helper/location.dart';
 import 'package:bayoum_store_app/screens/auth/widgets/carouselslider.dart';
@@ -153,9 +154,15 @@ class _HomeScreenState extends State<HomeScreen> {
                     children: [
                       Row(
                         children: [
-                          Image.asset(
-                            Assets.store,
-                            scale: 13,
+                          InkWell(
+                            onTap: () async {
+                              await LocalNotification.showLocalNotification(
+                                  'haleem', 0, 'Hi Omer', 'Tezzak');
+                            },
+                            child: Image.asset(
+                              Assets.store,
+                              scale: 13,
+                            ),
                           ),
                           const SizedBox(width: 5),
                           const Text(

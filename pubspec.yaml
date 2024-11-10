@@ -64,6 +64,9 @@ dependencies:
   animated_splash_screen: ^1.3.0
   google_sign_in: ^6.1.6
   twitter_login: ^4.4.2
+  share_plus: ^7.2.2
+  flutter_local_notifications: ^18.0.0
+  rxdart: ^0.27.7
 
 dev_dependencies:
   flutter_test:

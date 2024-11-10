@@ -1,3 +1,4 @@
+import 'package:bayoum_store_app/controlller/services/local_notification.dart';
 import 'package:bayoum_store_app/firebase_options.dart';
 import 'package:bayoum_store_app/helper/AppPages.dart';
 
@@ -31,6 +32,11 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     initialization();
+    initializeNotification();
+  }
+
+  void initializeNotification() async {
+    await LocalNotification.initializeNotification();
   }
 
   void initialization() async {
@@ -46,15 +52,15 @@ class _MyAppState extends State<MyApp> {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       initialBinding: GlobalBindings(),
-      initialRoute: AppPages.customerRegisterScreen,
+      initialRoute: AppPages.authGate,
       title: 'Bayoum-Store',
       theme: ThemeData(
         fontFamily: 'Dosis',
         appBarTheme: const AppBarTheme(
           backgroundColor: Colors.white,
-          iconTheme: IconThemeData(color: Colors.orangeAccent),
+          iconTheme: IconThemeData(color: Colors.red),
         ),
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blueAccent),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.red),
         useMaterial3: true,
       ),
       getPages: AppPages.routes,

@@ -12,11 +12,7 @@ import 'package:twitter_login/twitter_login.dart';
 class AuthController {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  final GoogleSignIn _googleSignIn = GoogleSignIn(scopes: [
-    'email',
-    'https://www.googleapis.com/auth/user.birthday.read',
-    'https://www.googleapis.com/auth/user.gender.read',
-  ]);
+
   final FirebaseStorage _firebaseStorage = FirebaseStorage.instance;
   Future<UserCredential> signInWithTwitter() async {
     // Create a TwitterLogin instance
@@ -61,7 +57,15 @@ class AuthController {
       );
 
       // Once signed in, return the UserCredential
-      return await FirebaseAuth.instance.signInWithCredential(credential);
+      UserCredential userCredential =
+          await FirebaseAuth.instance.signInWithCredential(credential);
+      await _firestore.collection('buyers').doc(_auth.currentUser!.uid).set({
+        'fullName': _auth.currentUser!.displayName,
+        'email': _auth.currentUser!.email,
+        'phoneNumber': _auth.currentUser!.phoneNumber,
+        'photo': _auth.currentUser!.photoURL,
+      });
+      return userCredential;
     } on FirebaseAuthException catch (e) {
       debugPrint(e.toString());
       Get.showSnackbar(
@@ -129,8 +133,8 @@ class AuthController {
       String email, String password) async {
     String? message;
     try {
-      UserCredential user = await _auth.signInWithEmailAndPassword(
-          email: email, password: password);
+      await _auth.signInWithEmailAndPassword(email: email, password: password);
+
       message = 'logged in successfuly';
     } on FirebaseAuthException catch (e) {
       message = e.toString();

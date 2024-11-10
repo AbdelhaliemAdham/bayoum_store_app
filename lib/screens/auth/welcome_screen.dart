@@ -1,6 +1,5 @@
 import 'package:bayoum_store_app/helper/AppPages.dart';
 import 'package:bayoum_store_app/screens/auth/RegisterPage.dart';
-import 'package:bayoum_store_app/screens/auth/login.dart';
 import 'package:external_app_launcher/external_app_launcher.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -61,8 +60,7 @@ class _footer extends StatelessWidget {
                         style: TextStyle(fontSize: 14, color: Colors.grey)),
                     TextSpan(
                         text: ' sign up',
-                        style:
-                            const TextStyle(fontSize: 18, color: Colors.red)),
+                        style: TextStyle(fontSize: 18, color: Colors.red)),
                     TextSpan(
                         text: ' with us !',
                         style: TextStyle(fontSize: 16, color: Colors.grey)),

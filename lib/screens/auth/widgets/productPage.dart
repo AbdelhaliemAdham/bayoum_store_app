@@ -1,4 +1,5 @@
 import 'package:bayoum_store_app/screens/MainScreens/product_card.dart';
+import 'package:bayoum_store_app/screens/inner-screens/product_details.dart';
 import 'package:bayoum_store_app/screens/inner-screens/product_details_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -39,7 +40,7 @@ class _ProductPageState extends State<ProductPage> {
                       return InkWell(
                         onTap: () {
                           Get.to(
-                            () => ProductDetailsScreen(
+                            () => ProductDetails(
                               productDetails: product,
                             ),
                           );

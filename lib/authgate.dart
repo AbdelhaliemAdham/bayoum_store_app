@@ -1,4 +1,4 @@
-import 'package:bayoum_store_app/screens/auth/welcome_screen.dart';
+import 'package:bayoum_store_app/screens/auth/login.dart';
 import 'package:bayoum_store_app/screens/MainScreens/mainscreen.dart';
 import 'package:bayoum_store_app/screens/inner-screens/internet_lost_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -48,12 +48,12 @@ class _AuthGateState extends State<AuthGate> {
         builder: (context, AsyncSnapshot<User?> snapshot) {
           if (connected) {
             if (!snapshot.hasData) {
-              return const FirstScreen();
+              return const CustomerLoginScreen();
             }
 
             return const MainScreen();
           }
-          return const MainScreen();
+          return const InternetLostScreen();
         });
   }
 }

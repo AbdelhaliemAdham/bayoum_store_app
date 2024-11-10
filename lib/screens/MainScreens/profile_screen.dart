@@ -1,4 +1,5 @@
 import 'package:bayoum_store_app/helper/assets.dart';
+import 'package:bayoum_store_app/screens/auth/login.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -6,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../helper/AppPages.dart';
-import '../auth/welcome_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -289,7 +289,7 @@ class _SecondContainerState extends State<SecondContainer> {
     FirebaseAuth.instance.signOut().whenComplete(
           () => Navigator.of(context).pushReplacement(
             MaterialPageRoute(builder: (context) {
-              return const FirstScreen();
+              return const CustomerLoginScreen();
             }),
           ),
         );
